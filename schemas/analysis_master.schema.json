@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:citetrace:schemas:analysis_master",
+  "title": "CiteTrace analysis_master",
+  "description": "Stage analysis input. citations.evaluation_yn='Y' joined with sources(crawl_yn='Y') and queries. SoT: paper/figures/Appendix_E_Data_Release_Reproducibility.md §E.2.1. NOTE 1: 'domain' column is INTENTIONALLY omitted (deprecated in favor of 'category'). NOTE 2: release pool n=761,495; the 'clen >= 3000' threshold mentioned in Appendix E.2.1 is a downstream analysis filter applied in analysis, NOT a schema constraint here (DB analysis_master keeps all evaluation_yn='Y' rows).",
+  "type": "object",
+  "required": [
+    "cit_id",
+    "query_id",
+    "site",
+    "category",
+    "model_short",
+    "provider",
+    "url_id",
+    "source_url",
+    "cited_sentence",
+    "clen",
+    "cited_len",
+    "QI_label",
+    "SP_label",
+    "ASF_label",
+    "SD_label",
+    "ST_label",
+    "ipam_score",
+    "asf_score",
+    "ssm_score",
+    "crawl_yn"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "cit_id": {"type": "integer", "minimum": 1},
+    "query_id": {"type": "string", "pattern": "^Q[0-9]{5}$"},
+    "site": {"type": "string"},
+    "category": {
+      "type": "string",
+      "enum": [
+        "Technology",
+        "Science",
+        "Culture & Recreation",
+        "Life & Arts",
+        "Professional",
+        "Business"
+      ]
+    },
+    "model_short": {
+      "type": "string",
+      "enum": [
+        "gpt-5",
+        "gpt-5-mini",
+        "claude-sonnet",
+        "claude-haiku",
+        "gemini-flash",
+        "gemini-pro",
+        "grok-nr",
+        "grok-r",
+        "sonar",
+        "sonar-rp"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "enum": ["OpenAI", "Anthropic", "Google", "xAI", "Perplexity"]
+    },
+    "url_id": {"type": "string", "pattern": "^S[0-9]{7}$"},
+    "source_url": {"type": "string", "format": "uri"},
+    "cited_sentence": {"type": "string", "minLength": 20},
+    "clen": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Crawl content length (chars). Analysis convention applies clen >= 3000 (Appendix B.7); not enforced here so that the full evaluable pool (761,495) round-trips."
+    },
+    "cited_len": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Length of cited_sentence (chars). Analysis convention applies cited_len >= 20 (Appendix B.7); not enforced here."
+    },
+    "QI_label": {"type": "string", "enum": ["QI1", "QI2", "QI3", "QI4", "QI5"]},
+    "SP_label": {"type": "string", "enum": ["SP1", "SP2", "SP3", "SP4", "SP5", "SP6"]},
+    "ASF_label": {"type": "string", "enum": ["ASF1", "ASF2", "ASF3", "ASF4", "ASF5"]},
+    "SD_label": {
+      "type": "string",
+      "enum": ["SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7", "SD8", "SD9", "SD10"]
+    },
+    "ST_label": {"type": "string", "enum": ["ST1", "ST2", "ST3", "ST4", "ST5", "ST6"]},
+    "ipam_score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Intent-Purpose Alignment Matrix lookup (QI x SP). Appendix C.2"
+    },
+    "asf_score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Answer-Source Fidelity score = int(ASF_label[2:])"
+    },
+    "ssm_score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Source Reliability Matrix lookup (ST x SD). Appendix C.3"
+    },
+    "crawl_yn": {
+      "type": "string",
+      "enum": ["Y"],
+      "description": "Always 'Y' in analysis_master (analyses conditional on crawl-success pool, Appendix B.6)"
+    }
+  }
+}

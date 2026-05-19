@@ -1,0 +1,27 @@
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Local environment
+.env
+*.env
+!.env.example
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Bundled HF parquets are tracked; everything else under data/ is local
+# pipeline scratch (search/, judge/, sample_run/, etc.).
+data/*
+!data/*.parquet
+data/model_responses.parquet
+
+# Pipeline-run scratch at repo root (results/ is the default --output-dir
+# target in the README example; logs/ comes from src.lib.log).
+logs/
+results/
+
+# Ignore user dry-run outputs under samples/ (samples/_dryrun_out/, etc.).
+samples/_*/

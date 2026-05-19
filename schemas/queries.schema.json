@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:citetrace:schemas:queries",
+  "title": "CiteTrace queries",
+  "description": "One row per Stack Exchange query. Mirrors the queries.parquet column set on Hugging Face.",
+  "type": "object",
+  "required": [
+    "query_id",
+    "site",
+    "category",
+    "question_title"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "query_id": {
+      "type": "string",
+      "pattern": "^Q[0-9]{5}$",
+      "description": "Q00001 ~ Q11200"
+    },
+    "site": {
+      "type": "string",
+      "description": "Stack Exchange site official name (28 sites). e.g. 'Stack Overflow', 'Medical Sciences'"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Technology",
+        "Science",
+        "Culture & Recreation",
+        "Life & Arts",
+        "Professional",
+        "Business"
+      ],
+      "description": "SE official 6-category"
+    },
+    "question_title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300,
+      "description": "Stack Exchange post title. Per Appendix B.1 quality filter: 15<=len<=150."
+    },
+    "question_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Permanent URL of the original Stack Exchange post."
+    },
+    "QI_label": {
+      "type": ["string", "null"],
+      "enum": ["QI1", "QI2", "QI3", "QI4", "QI5", null],
+      "description": "Query Intent label (Appendix C.1.1). Nullable when emitted by the sampler before LLM intent classification."
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:citetrace:schemas:sources",
+  "title": "CiteTrace sources",
+  "description": "One row per unique URL. HF release columns: url_id, source_url, host_tier, crawl_yn, clen, SP_label, SD_label, ST_label, crawled_at_first. Pipeline JSONL additionally carries 'resolved_url' and 'failure_category'; these are stripped at HF release time.",
+  "type": "object",
+  "required": [
+    "url_id",
+    "source_url",
+    "host_tier",
+    "crawl_yn",
+    "clen",
+    "crawled_at_first"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "url_id": {
+      "type": "string",
+      "pattern": "^S[0-9]{7}$",
+      "description": "S0000001 ~"
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Normalized URL (UTM stripped, Gemini proxy resolved)"
+    },
+    "resolved_url": {
+      "type": ["string", "null"],
+      "description": "Final URL after redirects (nullable when same as source_url or crawl failed)"
+    },
+    "host_tier": {
+      "type": "string",
+      "enum": [
+        "Academic",
+        "Commercial/Other",
+        "Forum/Q&A",
+        "Gov/Org",
+        "News",
+        "Social/Blog"
+      ],
+      "description": "URL-domain regex classification (49 rules, LLM-free). Default: Commercial/Other. Appendix B.6.4."
+    },
+    "crawl_yn": {
+      "type": "string",
+      "enum": ["Y", "N"]
+    },
+    "failure_category": {
+      "type": ["string", "null"],
+      "description": "When crawl_yn='N': HTTP code (4xx/5xx), 'timeout', 'cloudflare', 'pdf_parse_fail', 'robots_blocked', etc."
+    },
+    "clen": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Length of crawled main content (chars). 0 when crawl_yn='N'"
+    },
+    "SP_label": {
+      "type": ["string", "null"],
+      "enum": ["SP1", "SP2", "SP3", "SP4", "SP5", "SP6", null]
+    },
+    "SD_label": {
+      "type": ["string", "null"],
+      "enum": ["SD1", "SD2", "SD3", "SD4", "SD5", "SD6", "SD7", "SD8", "SD9", "SD10", null]
+    },
+    "ST_label": {
+      "type": ["string", "null"],
+      "enum": ["ST1", "ST2", "ST3", "ST4", "ST5", "ST6", null]
+    },
+    "crawled_at_first": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Captured immediately before page.goto() in crawler.crawl_url"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:citetrace:schemas:ipam_human_eval",
+  "title": "CiteTrace ipam_human_eval",
+  "description": "Expert validation of the 5 x 6 Intent-Purpose Alignment (IPA) Matrix. One row per matrix cell (30 cells = 5 QI x 6 SP), each rated by N=10 expert annotators on a 1-5 scale.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["idx", "cell_id", "QI_label", "SP_label", "annotator_scores", "mean", "median", "n"],
+  "properties": {
+    "idx":              { "type": "integer", "minimum": 0 },
+    "cell_id":          { "type": "string", "description": "e.g. 'QI1_SP1' through 'QI5_SP6'." },
+    "QI_label":         { "type": "string", "enum": ["QI1","QI2","QI3","QI4","QI5"] },
+    "SP_label":         { "type": "string", "enum": ["SP1","SP2","SP3","SP4","SP5","SP6"] },
+    "annotator_scores": {
+      "type":     "array",
+      "items":    { "type": "integer", "minimum": 1, "maximum": 5 },
+      "minItems": 1,
+      "description": "Independent 1-5 scores from each expert rater."
+    },
+    "mean":             { "type": "number", "minimum": 1, "maximum": 5 },
+    "median":           { "type": "number", "minimum": 1, "maximum": 5 },
+    "n":                { "type": "integer", "minimum": 1 }
+  }
+}

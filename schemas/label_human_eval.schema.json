@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:citetrace:schemas:label_human_eval",
+  "title": "CiteTrace label_human_eval (5 parquets)",
+  "description": "Shared shape for the five label-classification human-evaluation parquets shipped on Hugging Face: asf_human_eval, qi_human_eval, sd_human_eval, sp_human_eval, st_human_eval. Each holds 200 rows; ``task`` distinguishes which dimension a row belongs to. The subject column is one of cit_id (asf), query_id (qi), or url_id (sd/sp/st); the other two are absent in any given row.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["item_id", "task", "gpt4o_mini_label", "gpt4o_mini_reasoning", "human_labels"],
+  "properties": {
+    "item_id":              { "type": "string" },
+    "task":                 { "type": "string", "enum": ["ASF", "QI", "SD", "SP", "ST"] },
+    "cit_id":               { "type": ["integer", "null"] },
+    "query_id":             { "type": ["string", "null"], "pattern": "^Q[0-9]{5}$" },
+    "url_id":               { "type": ["string", "null"], "pattern": "^S[0-9]{7}$" },
+    "gpt4o_mini_label":     { "type": "string" },
+    "gpt4o_mini_reasoning": { "type": ["string", "null"] },
+    "human_labels":         {
+      "type":  "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Independent labels from each human annotator (typically three)."
+    }
+  }
+}
