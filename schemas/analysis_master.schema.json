@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:citetrace:schemas:analysis_master",
   "title": "CiteTrace analysis_master",
-  "description": "Stage analysis input. citations.evaluation_yn='Y' joined with sources(crawl_yn='Y') and queries. SoT: paper/figures/Appendix_E_Data_Release_Reproducibility.md §E.2.1. NOTE 1: 'domain' column is INTENTIONALLY omitted (deprecated in favor of 'category'). NOTE 2: release pool n=761,495; the 'clen >= 3000' threshold mentioned in Appendix E.2.1 is a downstream analysis filter applied in analysis, NOT a schema constraint here (DB analysis_master keeps all evaluation_yn='Y' rows).",
+  "description": "Primary release table containing 761,495 evaluable citations, formed by joining citations, successfully crawled sources, and queries.",
   "type": "object",
   "required": [
     "cit_id",
@@ -66,8 +66,8 @@
     "cited_sentence": {"type": "string", "minLength": 20},
     "clen": {
       "type": "integer",
-      "minimum": 0,
-      "description": "Crawl content length (chars). Analysis convention applies clen >= 3000 (Appendix B.7); not enforced here so that the full evaluable pool (761,495) round-trips."
+      "minimum": 100,
+      "description": "Crawled source body length in characters."
     },
     "cited_len": {
       "type": "integer",

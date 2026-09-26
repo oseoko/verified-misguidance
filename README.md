@@ -51,6 +51,14 @@ This runs the three-query sample using paid provider APIs. Set `QUERIES`
 and `MODELS` to use other queries or models. Output is written to
 `data/sample_run/sample/`.
 
+For custom queries and models:
+
+```bash
+QUERIES=path/to/queries.parquet \
+MODELS="model-id-1 model-id-2" \
+bash scripts/pipeline.sh all my_run
+```
+
 ## License
 
 Code: MIT. Stack Exchange queries: CC BY-SA 4.0. Research annotations,
