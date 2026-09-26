@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:citetrace:schemas:model_responses",
+  "title": "CiteTrace model_responses",
+  "description": "Raw LLM response text per (query × model). One row per response (11,200 queries × 10 models = 112,000 rows). Used for verifying citation extraction and building alternative extractors.",
+  "type": "object",
+  "required": [
+    "query_id",
+    "model_short",
+    "raw_response"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "query_id": {
+      "type": "string",
+      "pattern": "^Q[0-9]{5}$"
+    },
+    "model_short": {
+      "type": "string",
+      "enum": [
+        "gpt-5", "gpt-5-mini",
+        "claude-sonnet", "claude-haiku",
+        "gemini-flash", "gemini-pro",
+        "grok-nr", "grok-r",
+        "sonar", "sonar-rp"
+      ]
+    },
+    "raw_response": {
+      "type": "string",
+      "description": "Full text response from the LLM (before citation extraction)"
+    }
+  }
+}

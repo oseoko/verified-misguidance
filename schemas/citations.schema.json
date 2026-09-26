@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:citetrace:schemas:citations",
+  "title": "CiteTrace citations",
+  "description": "One row per (query, model, citation). HF release columns: cit_id, query_id, url_id, model_short, provider, cited_sentence, cited_len, ASF_label. Pipeline JSONL additionally carries 'model' (full id), 'evaluation_yn', and 'evaluation_fail_reason'; these are stripped at HF release time.",
+  "type": "object",
+  "required": [
+    "cit_id",
+    "query_id",
+    "url_id",
+    "model_short",
+    "provider",
+    "cited_sentence",
+    "cited_len"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "cit_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Globally unique citation id (1 ~ 761495 in full release)"
+    },
+    "query_id": {
+      "type": "string",
+      "pattern": "^Q[0-9]{5}$"
+    },
+    "url_id": {
+      "type": "string",
+      "pattern": "^S[0-9]{7}$"
+    },
+    "model": {
+      "type": "string",
+      "description": "Full model id (e.g. 'gpt-5-2025-08-07')"
+    },
+    "model_short": {
+      "type": "string",
+      "enum": [
+        "gpt-5",
+        "gpt-5-mini",
+        "claude-sonnet",
+        "claude-haiku",
+        "gemini-flash",
+        "gemini-pro",
+        "grok-nr",
+        "grok-r",
+        "sonar",
+        "sonar-rp"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "enum": ["OpenAI", "Anthropic", "Google", "xAI", "Perplexity"]
+    },
+    "cited_sentence": {
+      "type": "string",
+      "description": "Last 2 sentences of the cited block (provider-native citation API based)"
+    },
+    "cited_len": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Char length of cited_sentence. evaluable_yn='Y' requires >= 20 (Appendix B.7)"
+    },
+    "ASF_label": {
+      "type": ["string", "null"],
+      "enum": ["ASF1", "ASF2", "ASF3", "ASF4", "ASF5", null],
+      "description": "Answer-Source Fidelity (set after judge)"
+    },
+    "evaluation_yn": {
+      "type": "string",
+      "enum": ["Y", "N"]
+    },
+    "evaluation_fail_reason": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "crawl_fail",
+        "cited_too_short",
+        "cited_too_few_words",
+        "code_fragment",
+        "table_fragment",
+        "judge_unevaluable"
+      ]
+    }
+  }
+}
